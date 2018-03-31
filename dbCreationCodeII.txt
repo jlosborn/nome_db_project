@@ -1,0 +1,89 @@
+CREATE TABLE Employee(
+EmployeeID INT Not Null,
+FirstName CHAR(25) Not Null,
+LastName CHAR(25) Not Null,
+Background NVARCHAR(50),
+PRIMARY KEY (EmployeeID))
+;
+
+CREATE TABLE "Sample"(
+SampleID INT Not Null,
+SampleName NVARCHAR(25) Not Null,
+SampleOrigin NVARCHAR(60),
+SampleComposition NVARCHAR(1000),
+SampleProcessDescription NVARCHAR(1000),
+SampleCreationTechnique DATE,
+EmployeeID INT,
+PRIMARY KEY (SampleID),
+FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID))
+;
+
+CREATE TABLE Data(
+DataID INT Not Null,
+DataFolderPath NVARCHAR(1000),
+DataDescription NVARCHAR(1000),
+DataDate DATE,
+EmployeeID INT Not Null,
+PRIMARY KEY (DataID),
+FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID))
+;
+
+CREATE TABLE "Sample/Data"(
+SampleID INT Not Null,
+DataID INT Not Null,
+PRIMARY KEY (SampleID, DataID),
+FOREIGN KEY (SampleID) REFERENCES "Sample"(SampleID),
+FOREIGN KEY (DataID) REFERENCES Data(DataID))
+;
+
+CREATE TABLE Publication(
+PublicationID INT Not Null,
+ArticleName NVARCHAR(1000) Not Null,
+PublicationDate DATE Not Null,
+JournalName NVARCHAR(75) Not Null,
+ArticlePath NVARCHAR(100),
+ArticleDescription NVARCHAR(1000),
+PRIMARY KEY (PublicationID))
+;
+
+CREATE TABLE "Employee/Publication"(
+EmployeeID INT Not Null,
+PublicationID INT Not Null,
+AuthorOrder INT Not Null,
+PRIMARY KEY (EmployeeID, PublicationID),
+FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID),
+FOREIGN KEY (PublicationID) REFERENCES Publication(PublicationID))
+;
+
+CREATE TABLE "Sample/Publication"(
+SampleID INT Not Null,
+PublicationID INT Not Null,
+PRIMARY KEY (SampleID, PublicationID),
+FOREIGN KEY (SampleID) REFERENCES "Sample"(SampleID),
+FOREIGN KEY (PublicationID) REFERENCES Publication(PublicationID))
+;
+
+CREATE TABLE "Data/Publication"(
+DataID INT Not Null,
+PublicationID INT Not Null,
+PRIMARY KEY (DataID, PublicationID),
+FOREIGN KEY (DataID) REFERENCES Data(DataID),
+FOREIGN KEY (PublicationID) REFERENCES Publication(PublicationID))
+;
+
+CREATE TABLE GrantProposal(
+GrantProposalID INT Not Null,
+GrantProposalName NVARCHAR(25) Not Null,
+GrantFundingAgency NVARCHAR(50),
+GrantPartnerInstitutions NVARCHAR(200),
+WSUCashAmount DECIMAL(12,2),
+TotalProposalCashAmount DECIMAL(12,2),
+GrantProposalDescription NVARCHAR(1000),
+GrantProposalDate DATE,
+GrantProposalPath NVARCHAR(100),
+PublicationID INT,
+EmployeeID INT,
+PRIMARY KEY (GrantProposalID),
+FOREIGN KEY (PublicationID) REFERENCES Publication(PublicationID),
+FOREIGN KEY (EmployeeID) REFERENCES Employee(EmployeeID))
+;
